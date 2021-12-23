@@ -132,32 +132,32 @@ class Booster_list:
         for bstr in self.boosters:
             if bstr.power == "Bigger paddle":
                 pygame.draw.circle(screen, color_yellow, (bstr.x, bstr.y), bstr.size)
-                font = pygame.font.Font('freesansbold.ttf', 10)
-                text = font.render('+ paddle', True, color_black)
-                text_rect = text.get_rect()
-                text_rect.center = (bstr.x, bstr.y)
-                screen.blit(text, text_rect)
+                # font = pygame.font.Font('freesansbold.ttf', 10)
+                # text = font.render('+ paddle', True, color_black)
+                # text_rect = text.get_rect()
+                # text_rect.center = (bstr.x, bstr.y)
+                # screen.blit(text, text_rect)
             elif bstr.power == "Smaller paddle":
                 pygame.draw.circle(screen, color_green, (bstr.x, bstr.y), bstr.size)
-                font = pygame.font.Font('freesansbold.ttf', 10)
-                text = font.render('- paddle', True, color_black)
-                text_rect = text.get_rect()
-                text_rect.center = (bstr.x, bstr.y)
-                screen.blit(text, text_rect)
+                # font = pygame.font.Font('freesansbold.ttf', 10)
+                # text = font.render('- paddle', True, color_black)
+                # text_rect = text.get_rect()
+                # text_rect.center = (bstr.x, bstr.y)
+                # screen.blit(text, text_rect)
             elif bstr.power == "Faster ball":
                 pygame.draw.circle(screen, color_red, (bstr.x, bstr.y), bstr.size)
-                font = pygame.font.Font('freesansbold.ttf', 10)
-                text = font.render('+ speed', True, color_black)
-                text_rect = text.get_rect()
-                text_rect.center = (bstr.x, bstr.y)
-                screen.blit(text, text_rect)
+                # font = pygame.font.Font('freesansbold.ttf', 10)
+                # text = font.render('+ speed', True, color_black)
+                # text_rect = text.get_rect()
+                # text_rect.center = (bstr.x, bstr.y)
+                # screen.blit(text, text_rect)
             elif bstr.power == "Slower ball":
                 pygame.draw.circle(screen, color_blue, (bstr.x, bstr.y), bstr.size)
-                font = pygame.font.Font('freesansbold.ttf', 10)
-                text = font.render('- speed', True, color_black)
-                text_rect = text.get_rect()
-                text_rect.center = (bstr.x, bstr.y)
-                screen.blit(text, text_rect)
+                # font = pygame.font.Font('freesansbold.ttf', 10)
+                # text = font.render('- speed', True, color_black)
+                # text_rect = text.get_rect()
+                # text_rect.center = (bstr.x, bstr.y)
+                # screen.blit(text, text_rect)
 
     def collided(self):
         for bstr in self.boosters:
@@ -209,8 +209,34 @@ def set_score(player, cpu):
     font = pygame.font.Font('freesansbold.ttf', 28)
     text = font.render(f'Player score: {player.score}     CPU score: {cpu.score}', True, color_green)
     text_rect = text.get_rect()
-    text_rect.center = (width / 2, 40)
+    text_rect.center = (width * 0.33, 40)
     screen.blit(text, text_rect)
+
+    font_bstr = pygame.font.Font('freesansbold.ttf', 10)
+
+    pygame.draw.circle(screen, color_yellow, (960, 40), 25)
+    text1 = font_bstr.render('+ paddle', True, color_black)
+    text_rect1 = text1.get_rect()
+    text_rect1.center = (960, 40)
+    screen.blit(text1, text_rect1)
+
+    pygame.draw.circle(screen, color_green, (1030, 40), 25)
+    text2 = font_bstr.render('- paddle', True, color_black)
+    text_rect2 = text2.get_rect()
+    text_rect2.center = (1030, 40)
+    screen.blit(text2, text_rect2)
+
+    pygame.draw.circle(screen, color_red, (1100, 40), 25)
+    text3 = font_bstr.render('+ speed', True, color_black)
+    text_rect3 = text3.get_rect()
+    text_rect3.center = (1100, 40)
+    screen.blit(text3, text_rect3)
+
+    pygame.draw.circle(screen, color_blue, (1170, 40), 25)
+    text4 = font_bstr.render('- speed', True, color_black)
+    text_rect4 = text4.get_rect()
+    text_rect4.center = (1170, 40)
+    screen.blit(text4, text_rect4)
 
 
 def set_screen():
@@ -314,7 +340,7 @@ if __name__ == "__main__":
             ball = Ball()
             is_playing = True
 
-        if time.time() - old_time > random.randint(10, 20) and len(boosters.boosters) < 2:
+        if time.time() - old_time > random.randint(10, 20) and len(boosters.boosters) < 3:
             boosters.create()
             old_time = time.time()
 
