@@ -23,7 +23,11 @@ class Ball:
         self.size = 10
         self.color = color_white
         self.speed = 2
-        angle_deg = random.randint(45, 135)
+        side = random.randint(0, 1)
+        if side == 0:
+            angle_deg = random.randint(45, 135)
+        else:
+            angle_deg = -random.randint(45, 135)
         self.angle = math.radians(angle_deg)
 
     def display(self):
@@ -36,16 +40,20 @@ class Ball:
     def bounce(self):
         if self.y > (height - 5 - self.size):
             self.angle = math.pi - self.angle
-            return True
+            return 1
         elif self.y < (80 + self.size):
             self.angle = math.pi - self.angle
-            return True
+            return 1
         elif self.x > width - 5:
             player.score += 1
-            return False
+            if player.score == 7:
+                return 0
+            return -1
         elif self.x < 5:
             cpu.score += 1
-            return False
+            if cpu.score == 7:
+                return 0
+            return -1
 
 
 class Player:
@@ -73,6 +81,14 @@ class Player:
             if self.y - ball.size <= ball.y < self.y + self.height * 0.15 + ball.size:
                 ball.angle = math.radians(random.randint(125, 145))
                 ball.x = self.x + self.width + ball.size + 1
+                if ball.speed == 1:
+                    ball.speed = 1.5
+                elif ball.speed == 1.5:
+                    ball.speed = 2
+                elif ball.speed == 2:
+                    ball.speed = 2.5
+                elif ball.speed == 2.5:
+                    ball.speed = 3
             elif self.y + self.height * 0.15 + ball.size <= ball.y < self.y + self.height * 0.4 + ball.size:
                 ball.angle = math.radians(random.randint(105, 120))
                 ball.x = self.x + self.width + ball.size + 1
@@ -88,6 +104,14 @@ class Player:
             elif self.y + self.height * 0.85 + ball.size <= ball.y < self.y + self.height * 1.0 + ball.size:
                 ball.angle = math.radians(random.randint(35, 55))
                 ball.x = self.x + self.width + ball.size + 1
+                if ball.speed == 1:
+                    ball.speed = 1.5
+                elif ball.speed == 1.5:
+                    ball.speed = 2
+                elif ball.speed == 2:
+                    ball.speed = 2.5
+                elif ball.speed == 2.5:
+                    ball.speed = 3
 
 
 class CPU:
@@ -165,7 +189,7 @@ class Booster_list:
             dy = bstr.y - ball.y
             distance = math.hypot(dx, dy)
 
-            if distance < bstr.size + ball.size:
+            if distance < bstr.size + ball.size :
                 bstr.collided = True
                 if bstr.power == "Faster ball":
                     if ball.speed == 1:
@@ -205,7 +229,7 @@ class Booster_list:
             self.boosters = boosters_new
 
 
-def set_score(player, cpu):
+def set_header(player, cpu):
     font = pygame.font.Font('freesansbold.ttf', 28)
     text = font.render(f'Player score: {player.score}     CPU score: {cpu.score}', True, color_green)
     text_rect = text.get_rect()
@@ -286,7 +310,7 @@ def select_difficulty():
         else:
             pygame.draw.rect(screen, color_slate_blue, pygame.Rect((width / 2) - 100, 460, 200, 80))
 
-        text1 = font.render('Low', True, color_navy)
+        text1 = font.render('Easy', True, color_navy)
         text_rect1 = text1.get_rect()
         text_rect1.center = (width / 2, 300)
         screen.blit(text1, text_rect1)
@@ -296,7 +320,7 @@ def select_difficulty():
         text_rect2.center = (width / 2, 400)
         screen.blit(text2, text_rect2)
 
-        text3 = font.render('High', True, color_navy)
+        text3 = font.render('Hard', True, color_navy)
         text_rect3 = text3.get_rect()
         text_rect3.center = (width / 2, 500)
         screen.blit(text3, text_rect3)
@@ -318,12 +342,11 @@ def select_difficulty():
 
 if __name__ == "__main__":
     old_time = time.time()
-    pygame.init()
-
     running_game = True
-    is_playing = False
-
+    bounce_ret = -1
     width, height = 1280, 720
+
+    pygame.init()
 
     player = Player()
     cpu = CPU()
@@ -334,11 +357,13 @@ if __name__ == "__main__":
 
     while running_game:
         set_screen()
-        set_score(player, cpu)
+        set_header(player, cpu)
 
-        if is_playing is False:
+        if bounce_ret == -1:
             ball = Ball()
-            is_playing = True
+            bounce_ret = 1
+        elif bounce_ret == 0:
+            running_game = False
 
         if time.time() - old_time > random.randint(10, 20) and len(boosters.boosters) < 3:
             boosters.create()
@@ -349,7 +374,7 @@ if __name__ == "__main__":
         boosters.display()
 
         ball.move()
-        is_playing = ball.bounce()
+        bounce_ret = ball.bounce()
         ball.display()
 
         player.move()
